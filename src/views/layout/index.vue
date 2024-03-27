@@ -119,7 +119,6 @@ const openMenu = (e: Key[]) => {
 // 登出
 const exit = () => {
   store.useUser.clearUser();
-  console.log(store.useUser.token);
 };
 </script>
 

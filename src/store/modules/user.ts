@@ -32,7 +32,7 @@ export const useUserState = defineStore(
         username: "",
         auth: 0,
       };
-      router.push("/");
+      router.push("/login");
     };
 
     return {

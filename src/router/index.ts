@@ -56,7 +56,7 @@ const router = createRouter({
 // 导航守卫
 router.beforeEach((to, from, next) => {
   console.log(`触发守卫: to:${to.path} ~ from:${from.path}`);
-  const whiteList = ["/login"];
+  const whiteList = ["/login", "/404"];
   if (!useStore().useUser.token) {
     // 无token
     console.log("无token");
@@ -67,7 +67,7 @@ router.beforeEach((to, from, next) => {
       router.push("/login");
     } else {
       // 白名单内
-      console.log("无token, 前往白名称path");
+      console.log("无token, 前往白名单path");
 
       next();
     }
