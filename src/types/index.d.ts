@@ -4,3 +4,12 @@ export interface IResponse<T = any> {
   data: T;
   time: string;
 }
+
+export interface userInfoType {
+  id: number;
+  account: string;
+  username?: string;
+  email?: string;
+  auth: number;
+  // token?: string;
+}

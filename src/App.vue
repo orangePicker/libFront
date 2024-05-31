@@ -10,5 +10,7 @@
 #app {
   height: 100vh;
   margin: auto;
+  overflow: hidden;
+  min-width: 1200px;
 }
 </style>

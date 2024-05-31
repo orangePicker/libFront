@@ -18,17 +18,12 @@ const routes: RouteRecordRaw[] = [
       {
         path: "bookConf",
         name: "bookConf",
-        component: () => import("../views/bookConf/index.vue"),
-      },
-      {
-        path: "lendConf",
-        name: "lendConf",
-        component: () => import("../views/lendConf/index.vue"),
+        component: () => import("../views/bookConf/BookConf.vue"),
       },
       {
         path: "userConf",
         name: "userConf",
-        component: () => import("../views/userConf/index.vue"),
+        component: () => import("../views/userConf/userConf.vue"),
       },
     ],
   },
@@ -57,6 +52,7 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   console.log(`触发守卫: to:${to.path} ~ from:${from.path}`);
   const whiteList = ["/login", "/404"];
+
   if (!useStore().useUser.token) {
     // 无token
     console.log("无token");

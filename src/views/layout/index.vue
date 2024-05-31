@@ -1,5 +1,5 @@
 <template>
-  <Layout style="user-select: none">
+  <Layout>
     <LayoutSider theme="light"
       ><Menu
         :items="muneList"
@@ -15,11 +15,16 @@
       <LayoutHeader style="background-color: #fff"
         ><h2 style="user-select: none">橘子图书 OrangeLibrary</h2></LayoutHeader
       >
-      <LayoutContent><RouterView /></LayoutContent>
+      <LayoutContent style="padding: 10px; overflow-y: auto; max-height: 820px"
+        ><RouterView
+      /></LayoutContent>
       <LayoutFooter style="background-color: #fff"
+        ><Button type="primary" @click="openMyInfo" style="margin-right: 20px"
+          >我的信息</Button
         ><Button type="primary" @click="exit">登出</Button></LayoutFooter
       >
     </Layout>
+    <myInfo ref="myInfoRef" />
   </Layout>
 </template>
 
@@ -39,9 +44,17 @@ import {
   Button,
 } from "ant-design-vue";
 import { Key } from "ant-design-vue/es/_util/type";
-import { VNode, h, ref } from "vue";
+import { VNode, h, nextTick, ref } from "vue";
 import { useRouter } from "vue-router";
 import useStore from "../../store/index";
+import myInfo from "../../components/myInfo/myInfo.vue";
+
+const myInfoRef = ref();
+const openMyInfo = () => {
+  nextTick(() => {
+    myInfoRef.value.changeOpenState(true);
+  });
+};
 
 //store
 const store = useStore();
@@ -76,12 +89,6 @@ const muneList = ref<ItemType[]>([
         label: "图书管理",
         path: "/bookConf",
       },
-      {
-        key: "2-2",
-        // icon: h(HomeOutlined),
-        label: "借阅管理",
-        path: "/lendConf",
-      },
     ],
   },
   {
@@ -112,8 +119,8 @@ const selectMenu = (e: any) => {
 const openKey = ref<Key[]>(store.useConfig.config.openKeys);
 
 const openMenu = (e: Key[]) => {
-  store.useConfig.config.openKeys = e;
   openKey.value = [e[e.length - 1]];
+  store.useConfig.config.openKeys = openKey.value;
 };
 
 // 登出
