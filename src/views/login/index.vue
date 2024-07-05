@@ -47,9 +47,13 @@
             <img class="passCode" @click="reCode" :src="codeSrc" />
           </FormItem>
           <FormItem :wrapper-col="{ offset: 8 }">
-            <Button type="primary" html-type="submit" style="width: 250px">{{
-              isLogin ? "登录" : "注册"
-            }}</Button>
+            <Button
+              :loading="loginLoading"
+              type="primary"
+              html-type="submit"
+              style="width: 250px"
+              >{{ isLogin ? "登录" : "注册" }}</Button
+            >
             <Button type="link" @click="isLogin = !isLogin">{{
               !isLogin ? "登录" : "注册"
             }}</Button>
@@ -77,7 +81,7 @@ import useStore from "../../store";
 import { userInfoType } from "../../types";
 
 // 获取验证码
-const defUrl = "http://localhost:3000/util/getCode?t=";
+const defUrl = `${import.meta.env.VITE_BASEURL}util/getCode?t=`;
 const codeSrc = ref<string>(defUrl + new Date().getTime());
 
 // 重新获取验证码
@@ -117,14 +121,17 @@ watch(isLogin, () => {
   formRef.value.resetFields();
 });
 
+const loginLoading = ref<boolean>(false);
 // 提交
 const formSubmit = async (values: any) => {
+  loginLoading.value = true;
   if (isLogin.value) {
     try {
       const res = await myHttp<{ userInfo: userInfoType; token: string }>(
         "user/login",
         values
       );
+      loginLoading.value = false;
       if (res.code === 200) {
         useStore().useUser.token = res.data.token || "";
         useStore().useUser.userInfo = res.data.userInfo;
@@ -134,6 +141,7 @@ const formSubmit = async (values: any) => {
       reCode();
       message.warning(res.message);
     } catch (error) {
+      loginLoading.value = false;
       console.error(error);
     }
   } else {
@@ -142,6 +150,7 @@ const formSubmit = async (values: any) => {
         return message.warning("两次密码输入不一致");
       }
       const res = await myHttp("user/register", values);
+      loginLoading.value = false;
       if (res.code === 200) {
         isLogin.value = true;
         return message.success(res.message);
@@ -149,6 +158,7 @@ const formSubmit = async (values: any) => {
       reCode();
       message.warning(res.message);
     } catch (error) {
+      loginLoading.value = false;
       console.error(error);
     }
   }

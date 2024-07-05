@@ -3,7 +3,8 @@ import { IResponse } from "../../types";
 import { message } from "ant-design-vue";
 import useStore from "../../store";
 
-const baseURL = "http://localhost:3000/";
+// const baseURL = "http://localhost:3000/";
+const baseURL = import.meta.env.VITE_BASEURL;
 const myInterceptors = axios.create({
   withCredentials: true,
   timeout: 10000,
@@ -35,10 +36,12 @@ myInterceptors.interceptors.request.use((config) => {
 // 响应拦截
 myInterceptors.interceptors.response.use(
   (response) => {
+    console.log("response");
+
     return response;
   },
   (err) => {
-    switch (err.response.status) {
+    switch (err.response?.status) {
       case 401:
         useStore().useUser.clearUser();
         return message.info("登录已失效或过期");
