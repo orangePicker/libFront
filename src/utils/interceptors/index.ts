@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
 import { IResponse } from "../../types";
 import { message } from "ant-design-vue";
 import useStore from "../../store";
@@ -9,7 +9,8 @@ const myInterceptors = axios.create({
   withCredentials: true,
   timeout: 10000,
 });
-
+// 默认不携带cookie
+myInterceptors.defaults.withCredentials = true;
 // 请求拦截器
 myInterceptors.interceptors.request.use((config) => {
   // 无token请求白名单
@@ -53,10 +54,11 @@ myInterceptors.interceptors.response.use(
 );
 
 // 请求
-export async function myHttp<T = any>(url: string, data?: any) {
+export async function myHttp<T = any>(url: string, data?: any, config?: AxiosRequestConfig) {
   const res = await myInterceptors.post<null, AxiosResponse<IResponse<T>>>(
     url,
-    data
+    data,
+    config
   );
   return res.data;
 }

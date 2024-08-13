@@ -129,7 +129,8 @@ const formSubmit = async (values: any) => {
     try {
       const res = await myHttp<{ userInfo: userInfoType; token: string }>(
         "user/login",
-        values
+        values,
+        {withCredentials: true}
       );
       loginLoading.value = false;
       if (res.code === 200) {
@@ -149,7 +150,7 @@ const formSubmit = async (values: any) => {
       if (formData.password !== formData.enterPassword) {
         return message.warning("两次密码输入不一致");
       }
-      const res = await myHttp("user/register", values);
+      const res = await myHttp("user/register", values,{withCredentials: true});
       loginLoading.value = false;
       if (res.code === 200) {
         isLogin.value = true;
