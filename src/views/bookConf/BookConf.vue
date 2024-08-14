@@ -141,6 +141,7 @@ const queryBook = async () => {
   if (res.code === 200) {
     TableData.value = res.data.books;
     ipagination.value.total = res.data.total;
+    message.success('查询成功')
   } else {
     message.info(res.message);
   }
